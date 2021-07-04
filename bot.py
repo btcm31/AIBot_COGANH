@@ -13,12 +13,9 @@ class Bot:
         best_move = None
         Eval = -9999 if isOptimizer else 9999
         for move in board.getAllAvailableMoves(player,dt):
-            new_board = Board(board.make_move(move[0], move[1],player))
+            new_board = copy.deepcopy(board.make_move(move[0], move[1],player))
             m = board.checkBAY(board,new_board)
-            
             currEval = self.__minimax_alpha_beta(new_board, depth - 1, alpha, beta,-player,not isOptimizer,m)[1]
-            temp.board_print()
-            return 0
             if isOptimizer and Eval < currEval:
                 Eval = currEval
                 best_move = move
@@ -40,11 +37,10 @@ class Bot:
         else:
             dt = board.checkBAY(Board(self.preState),board)
         if dt[0]!=dt[1]:
-            result = self.__minimax_alpha_beta(board, 2, -9999, 9999, player,False, dt)
+            result = self.__minimax_alpha_beta(board, 4, -9999, 9999, player,False, dt)
         else:
-            result = self.__minimax_alpha_beta(board, 3, -9999, 9999, player,True, dt)
-            return 0
+            result = self.__minimax_alpha_beta(board, 5, -9999, 9999, player,True, dt)
         if result[0]:
-            self.preState = copy.deepcopy(board.make_move(result[0][0],result[0][1],player))
+            self.preState = copy.deepcopy(board.make_move(result[0][0],result[0][1],player).state)
         return result[0]
 

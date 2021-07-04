@@ -7,20 +7,27 @@ def play():
     player = 1
     board.board_print()
     while not board.is_end(player):
-        tBoard = Board(board.state)
         move = ()
         if player == 1:
+
             mstart = tuple(map(lambda x: int(x), input("Input start point: ").split(" ")))
             while not board.conditionPos(mstart,player):
                 mstart = tuple(map(lambda x: int(x), input("Input start point again: ").split(" ")))
+
+            lstNext = [point[1] for point in board.getAllAvailableMoves(player,(0,0)) if point[0]==mstart]
+
+
             mend = tuple(map(lambda x: int(x), input("Input end point: ").split(" ")))
-            while not board.conditionPos(mend,0):
-                mend = tuple(map(lambda x: int(x), input("Input end point again: ").split(" ")))
+            while mend not in lstNext:
+                mend = tuple(map(lambda x: int(x), input("Endpoint is invalid! Again: ").split(" ")))
+
             move = (mstart, mend)
-            board.state = board.make_move(mstart, mend , 1)
+            board = copy.deepcopy(board.make_move(mstart, mend , player))
+
+            
         else:
-            move = bot.move(tBoard,player)
-            board.state = copy.deepcopy(board.make_move(move[0], move[1] , 1))
+            move = bot.move(board,player)
+            board = copy.deepcopy(board.make_move(move[0], move[1] , player))
 
         board.board_print(move)
         player = -player

@@ -118,13 +118,13 @@ class Board:
             if self.state[k[0]][k[1]]==0:
                 return False
             if self.state[k[0]][k[1]]==player:
-                mboard = Board(self.state)
+                mboard = copy.deepcopy(Board(self.state))
                 mboard.state[pos[0]][pos[1]] = -player
                 if not mboard.checkVAY(k,player):
                     return False
         return True
     def moveVAY(self, pos, player):
-        tboard = Board(self.state)
+        tboard = copy.deepcopy(Board(self.state))
         tboard.state[pos[0]][pos[1]] = -player
         i = pos[0]
         j = pos[1]
@@ -135,10 +135,10 @@ class Board:
         for k in lst:
             if tboard.state[k[0]][k[1]]==player:
                 tboard.state[k[0]][k[1]] = -player 
-                tboard.state = copy.deepcopy(tboard.moveVAY(k,player))
-        return tboard.state
+                tboard = copy.deepcopy(tboard.moveVAY(k,player))
+        return tboard
     def make_move(self, startmove, nextmove, player):
-        tempBoard = Board(self.state)
+        tempBoard = copy.deepcopy(Board(self.state))
         tempBoard.state[nextmove[0]][nextmove[1]] = player
         tempBoard.state[startmove[0]][startmove[1]] = 0
         #GANH
@@ -151,9 +151,9 @@ class Board:
                     lst.append((i+1,j+1))
                     lst.append((i-1,j-1))
                     if tempBoard.checkVAY((i+1,j+1),-player):
-                        tempBoard.state = copy.deepcopy(tempBoard.moveVAY((i+1,j+1),-player))
+                        tempBoard = copy.deepcopy(tempBoard.moveVAY((i+1,j+1),-player))
                     if tempBoard.checkVAY((i-1,j-1),-player):
-                        tempBoard.state = copy.deepcopy(tempBoard.moveVAY((i-1,j-1),-player))
+                        tempBoard = copy.deepcopy(tempBoard.moveVAY((i-1,j-1),-player))
                     tempBoard.state[i+1][j+1] = player
                     tempBoard.state[i-1][j-1] = player
             if self.conditionMove((i-1,j+1)) and self.conditionMove((i+1,j-1)):
@@ -161,9 +161,9 @@ class Board:
                     lst.append((i-1,j+1))
                     lst.append((i+1,j-1))
                     if tempBoard.checkVAY((i-1,j+1),-player):
-                        tempBoard.state = copy.deepcopy(tempBoard.moveVAY((i-1,j+1),-player))
+                        tempBoard = copy.deepcopy(tempBoard.moveVAY((i-1,j+1),-player))
                     if tempBoard.checkVAY((i+1,j-1),-player):
-                        tempBoard.state = copy.deepcopy(tempBoard.moveVAY((i+1,j-1),-player))
+                        tempBoard = copy.deepcopy(tempBoard.moveVAY((i+1,j-1),-player))
                     tempBoard.state[i-1][j+1] = player
                     tempBoard.state[i+1][j-1] = player
         if self.conditionMove((i+1,j)) and self.conditionMove((i-1,j)):
@@ -171,9 +171,9 @@ class Board:
                 lst.append((i+1,j))
                 lst.append((i-1,j))
                 if tempBoard.checkVAY((i+1,j),-player):
-                    tempBoard.state = copy.deepcopy(tempBoard.moveVAY((i+1,j),-player))
+                    tempBoard = copy.deepcopy(tempBoard.moveVAY((i+1,j),-player))
                 if tempBoard.checkVAY((i-1,j),-player):
-                    tempBoard.state = copy.deepcopy(tempBoard.moveVAY((i-1,j),-player))
+                    tempBoard = copy.deepcopy(tempBoard.moveVAY((i-1,j),-player))
                 tempBoard.state[i+1][j] = player
                 tempBoard.state[i-1][j] = player
         if self.conditionMove((i,j+1)) and self.conditionMove((i,j-1)):
@@ -181,25 +181,25 @@ class Board:
                 lst.append((i,j+1))
                 lst.append((i,j-1))
                 if tempBoard.checkVAY((i,j+1),-player):
-                    tempBoard.state = copy.deepcopy(tempBoard.moveVAY((i,j+1),-player))
+                    tempBoard = copy.deepcopy(tempBoard.moveVAY((i,j+1),-player))
                 if tempBoard.checkVAY((i,j-1),-player):
-                    tempBoard.state = copy.deepcopy(tempBoard.moveVAY((i,j-1),-player))
+                    tempBoard = copy.deepcopy(tempBoard.moveVAY((i,j-1),-player))
                 tempBoard.state[i][j+1] = player
                 tempBoard.state[i][j-1] = player
-
+        
         #VAY
         for k in lst:
-            tempBoard.state = copy.deepcopy(tempBoard.VAY(k,player))
-        tempBoard = Board(tempBoard.VAY((i,j),player))
-        return tempBoard.state
+            tempBoard = copy.deepcopy(tempBoard.VAY(k,player))
+        tempBoard = copy.deepcopy(tempBoard.VAY((i,j),player))
+        return tempBoard
     def VAY(self, pos, player):
         i,j =pos[0],pos[1]
-        tempBoard = Board(self.state)
+        tempBoard = copy.deepcopy(Board(self.state))
         lst = [z for z in [(i-1,j),(i,j-1),(i,j+1),(i+1,j)] if self.conditionPos(z,-player)]
         if (i+j)%2==0:
             lst = [z for z in [(i-1,j-1),(i-1,j),(i-1,j+1),(i,j-1),(i,j+1),(i+1,j),(i+1,j-1),(i+1,j+1)] if self.conditionPos(z,-player)]
         for l in lst:
             if tempBoard.checkVAY(l,-player):
-                tempBoard.state = copy.deepcopy(tempBoard.moveVAY(l,-player))
-        return tempBoard.state
+                tempBoard = copy.deepcopy(tempBoard.moveVAY(l,-player))
+        return tempBoard
 
