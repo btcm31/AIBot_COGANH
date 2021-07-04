@@ -1,14 +1,15 @@
 import random
 import copy
 from board import Board
+import time
 
 class Bot:
-    def __init__(self,timeExceed):
-        self.timeExceed = timeExceed
+    def __init__(self,remaintime):
+        self.remaintime = remaintime
         self.preState = []
     def __minimax_alpha_beta(self, board:Board, depth, alpha, beta, player,isOptimizer,dt):
         temp = Board(board.state)
-        if depth == 0 or board.is_end(player):
+        if depth == 0 or board.is_end(player)[0]:
             return None, board.evaluate(-player)
         best_move = None
         Eval = -9999 if isOptimizer else 9999
@@ -30,6 +31,7 @@ class Bot:
                     break
         return best_move, Eval
     def move(self, board:Board, player):
+        startT = time.time()
         dt = [[0,0],[0,0]]
         if self.preState==[]:
             m = Board([[-1,-1,-1,-1,-1],[-1, 0, 0, 0,-1],[ 1, 0, 0, 0,-1],[ 1, 0, 0, 0, 1],[ 1, 1, 1, 1, 1]])
@@ -37,10 +39,11 @@ class Bot:
         else:
             dt = board.checkBAY(Board(self.preState),board)
         if dt[0]!=dt[1]:
-            result = self.__minimax_alpha_beta(board, 4, -9999, 9999, player,False, dt)
+            result = self.__minimax_alpha_beta(board, 4, -9999, 9999, player, False, dt)
         else:
-            result = self.__minimax_alpha_beta(board, 5, -9999, 9999, player,True, dt)
+            result = self.__minimax_alpha_beta(board, 5, -9999, 9999, player, True, dt)
         if result[0]:
             self.preState = copy.deepcopy(board.make_move(result[0][0],result[0][1],player).state)
+        self.remaintime = self.remaintime - (time.time() - startT)
         return result[0]
 

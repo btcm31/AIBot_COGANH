@@ -49,16 +49,16 @@ class Board:
         count = 0
         lst = self.getAllAvailableMoves(player,[[0,0],[0,0]])
         if len(lst)==0:
-            return True
+            return True, 0
         for i in range(0,5):
             for j in range(0,5):
                 if self.state[i][j] == player:
                     count = count + 1
 
         if count in [0,16]:
-            return True
+            return True, count
         
-        return False
+        return False, count
     def board_print(self, move=()):
         
         print("====== The current board is : ======")
@@ -202,4 +202,20 @@ class Board:
             if tempBoard.checkVAY(l,-player):
                 tempBoard = copy.deepcopy(tempBoard.moveVAY(l,-player))
         return tempBoard
+    
+
+    def Botboard_print(self, move, bot, remaintime):
+        
+        print("====== The board after bot %s : ======" % bot)
+        print("====== Remain time of bot %s is %s : ======" % (bot,remaintime))
+        if move:
+            print("move = ", move)
+        print("   ", " 0", " 1", " 2", " 3", " 4")
+        for i in range(5):
+            print(i, ":", end=" ")
+            for j in range(5):
+                print(" "*(0 if self.state[i][j]==-1 else 1) + str(self.state[i][j]), end=" ")
+            print()
+        
+        print("")
 
