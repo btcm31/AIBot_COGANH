@@ -35,11 +35,11 @@ class Bot:
         dt = [[0,0],[0,0]]
         if self.preState==[]:
             m = Board([[-1,-1,-1,-1,-1],[-1, 0, 0, 0,-1],[ 1, 0, 0, 0,-1],[ 1, 0, 0, 0, 1],[ 1, 1, 1, 1, 1]])
-            dt = board.checkBAY(Board([[-1,-1,-1,-1,-1],[-1, 0, 0, 0,-1],[ 1, 0, 0, 0,-1],[ 1, 0, 0, 0, 1],[ 1, 1, 1, 1, 1]]),board)
+            dt = board.checkBAY(m,board)
         else:
             dt = board.checkBAY(Board(self.preState),board)
         if dt[0]!=dt[1]:
-            result = self.__minimax_alpha_beta(board, 4, -9999, 9999, player, False, dt)
+            result = self.__minimax_alpha_beta(board, 6, -9999, 9999, player, False, dt)
         else:
             result = self.__minimax_alpha_beta(board, 5, -9999, 9999, player, True, dt)
         if result[0]:
