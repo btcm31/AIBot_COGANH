@@ -2,11 +2,12 @@ from board import Board
 from bot import Bot
 import copy
 import time
+import random
 
 def playvsBot():
     bot = Bot(90)
     board = Board([[-1,-1,-1,-1,-1],[-1, 0, 0, 0,-1],[ 1, 0, 0, 0,-1],[ 1, 0, 0, 0, 1],[ 1, 1, 1, 1, 1]])
-    player = 1
+    player = [-1,1][random.randint(0, 1)]
     board.board_print()
     youtime = time.time()
     while not board.is_end(player)[0]:
@@ -41,9 +42,9 @@ def playvsBot():
                     continue
                 else:
                     break
-            if time.time() - youtime > 90:
+            """ if time.time() - youtime > 90:
                 print("You timed out!!")
-                break
+                break """
             move = (mstart, mend)
             board = copy.deepcopy(board.make_move(mstart, mend , player))
         else:
@@ -59,7 +60,7 @@ def BotvsBot():
     bot1 = Bot(90)
     bot2 = Bot(90)
     board = Board([[-1,-1,-1,-1,-1],[-1, 0, 0, 0,-1],[ 1, 0, 0, 0,-1],[ 1, 0, 0, 0, 1],[ 1, 1, 1, 1, 1]])
-    player = 1
+    player = [-1,1][random.randint(0, 1)]
     board.board_print()
     while not board.is_end(player)[0]:
         move = ()
